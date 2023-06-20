@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import '../App.scss';
 import axios from 'axios';
 
-const backendUrl = 'http://localhost:5889';
+const backendUrl = 'http://localhost:3610';
 
 interface IUploadFile {
 	file: string;
