@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import '../App.scss';
 import axios from 'axios';
-import { _initialUploadFile, _initialFormFields, IFileItem, IFormFields } from '../interfaces';
-
-const backendUrl = 'http://localhost:3610';
+import {
+	_initialUploadFile,
+	_initialFormFields,
+	IFileItem,
+	IFormFields,
+} from '../interfaces';
+import { backendUrl } from '../config';
 
 export const PageUpload = () => {
 	const [uploadFile, setUploadFile] = useState({ ..._initialUploadFile });
