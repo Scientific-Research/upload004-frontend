@@ -1,26 +1,16 @@
-import { useRef, useState, useEffect, ChangeEvent } from 'react';
+import { useRef } from 'react';
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 import '../App.scss';
 import axios from 'axios';
-import {
-	_initialUploadFile,
-	_initialFormFields,
-	IFileItem,
-	IFormFields,
-	IUploadFile,
-} from '../interfaces';
+import { _initialUploadFile, _initialFormFields } from '../interfaces';
 import { backendUrl } from '../config';
 
 export const PageUpload = () => {
 	const {
 		uploadFile,
-		setUploadFile,
 		formFields,
-		setFormFields,
 		fileItems,
-		setFileItems,
-		fetchFileItems,
 		handleSubmit,
 		handleFileChange,
 		handleFormFieldChange,
