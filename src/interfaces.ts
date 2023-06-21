@@ -1,11 +1,3 @@
-export interface IUploadFile {
-	file: string;
-	title: string;
-	description: string;
-	notes: string;
-	fileName: string;
-}
-
 export interface IFileItem {
 	title: string;
 	description: string;
@@ -20,6 +12,13 @@ export interface IFormFields {
 	notes: string;
 }
 
+export interface IUploadFile {
+	preview: string;
+	name: string;
+	// data: string;
+	data: File | null;
+}
+
 export const _initialFormFields = {
 	title: '',
 	description: '',
@@ -27,6 +26,6 @@ export const _initialFormFields = {
 };
 export const _initialUploadFile = {
 	preview: '',
-	data: '',
 	name: '',
+	data: null,
 };

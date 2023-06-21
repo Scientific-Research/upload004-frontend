@@ -6,14 +6,13 @@ import {
 	_initialFormFields,
 	IFileItem,
 	IFormFields,
+	IUploadFile,
 } from '../interfaces';
 import { backendUrl } from '../config';
 
 export const PageUpload = () => {
-	const [uploadFile, setUploadFile] = useState({ ..._initialUploadFile });
-	const [formFields, setFormFields] = useState<IFormFields>({
-		..._initialFormFields,
-	});
+	const [uploadFile, setUploadFile] = useState<IUploadFile>(_initialUploadFile);
+	const [formFields, setFormFields] = useState<IFormFields>(_initialFormFields);
 	const [fileItems, setFileItems] = useState<IFileItem[]>([]);
 
 	const fetchFileItems = () => {
@@ -34,7 +33,7 @@ export const PageUpload = () => {
 			formData.append('title', formFields.title);
 			formData.append('description', formFields.description);
 			formData.append('notes', formFields.notes);
-			formData.append('fileName', (uploadFile.data as any).name);
+			formData.append('fileName', uploadFile.name);
 			const response = await fetch(`${backendUrl}/uploadfile`, {
 				method: 'POST',
 				body: formData,
@@ -46,17 +45,23 @@ export const PageUpload = () => {
 		}
 	};
 
-	const handleFileChange = (e: any) => {
-		const file = e.target.files[0];
-		const _uploadFile = {
-			name: file.name,
-			preview: URL.createObjectURL(file),
-			data: e.target.files[0],
-		};
-		setUploadFile(_uploadFile);
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files !== null) {
+			const file = e.target.files[0];
+			const _uploadFile = {
+				name: file.name,
+				preview: URL.createObjectURL(file),
+				// data: e.target.files[0],
+				data: file,
+			};
+			setUploadFile(_uploadFile);
+		}
 	};
 
-	const handleFormFieldChange = (e: any, fieldName: string) => {
+	const handleFormFieldChange = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		fieldName: string
+	) => {
 		const value = e.target.value;
 		formFields[fieldName as keyof IFormFields] = value;
 		setFormFields({ ...formFields });
@@ -76,9 +81,7 @@ export const PageUpload = () => {
 								id="title"
 								autoFocus
 								value={formFields.title}
-								onChange={(e) =>
-									handleFormFieldChange(e, 'title')
-								}
+								onChange={(e) => handleFormFieldChange(e, 'title')}
 							/>
 
 							<label htmlFor="description">Description</label>
@@ -86,38 +89,25 @@ export const PageUpload = () => {
 								type="text"
 								id="description"
 								value={formFields.description}
-								onChange={(e) =>
-									handleFormFieldChange(e, 'description')
-								}
+								onChange={(e) => handleFormFieldChange(e, 'description')}
 							/>
 
 							<label htmlFor="notes">Notes</label>
 							<input
 								type="text"
 								value={formFields.notes}
-								onChange={(e) =>
-									handleFormFieldChange(e, 'notes')
-								}
+								onChange={(e) => handleFormFieldChange(e, 'notes')}
 							/>
 
 							<label>File to upload</label>
-							<input
-								type="file"
-								onChange={handleFileChange}
-							></input>
+							<input type="file" onChange={handleFileChange}></input>
 							<div className="buttonArea">
 								<div className="preview">
 									{uploadFile.name.endsWith('.png') ||
 									uploadFile.name.endsWith('.jpg') ? (
-										<img
-											src={uploadFile.preview}
-											width="100"
-											height="100"
-										/>
+										<img src={uploadFile.preview} width="100" height="100" />
 									) : (
-										<div className="previewFileName">
-											{uploadFile.name}
-										</div>
+										<div className="previewFileName">{uploadFile.name}</div>
 									)}
 								</div>
 								<div className="buttonWrapper">
@@ -129,28 +119,18 @@ export const PageUpload = () => {
 				</section>
 				<section className="fileItemsArea">
 					{fileItems.length < 2 && <h2>File Items</h2>}
-					{fileItems.length >= 2 && (
-						<h2>{fileItems.length} File Items</h2>
-					)}
+					{fileItems.length >= 2 && <h2>{fileItems.length} File Items</h2>}
 					{fileItems.length === 0 && (
 						<p>There are {fileItems.length} file items</p>
 					)}
 					{fileItems.map((fileItem, i) => {
 						return (
 							<div className="fileItem" key={i}>
-								<img
-									src={`${backendUrl}/${fileItem.iconPathAndFileName}`}
-								/>
+								<img src={`${backendUrl}/${fileItem.iconPathAndFileName}`} />
 								<div className="info">
-									<div className="title">
-										{fileItem.title}
-									</div>
-									<div className="description">
-										{fileItem.description}
-									</div>
-									<div className="notes">
-										{fileItem.notes}
-									</div>
+									<div className="title">{fileItem.title}</div>
+									<div className="description">{fileItem.description}</div>
+									<div className="notes">{fileItem.notes}</div>
 									<div className="fileName">
 										<a
 											target="_blank"
