@@ -13,10 +13,9 @@ import {
 import { backendUrl } from '../config';
 
 export const PageUpload = () => {
-	const { uploadFile, setUploadFile } = useContext(AppContext);
-	const [formFields, setFormFields] = useState<IFormFields>({
-		..._initialFormFields,
-	});
+	const { uploadFile, setUploadFile, formFields, setFormFields } =
+		useContext(AppContext);
+
 	const [fileItems, setFileItems] = useState<IFileItem[]>([]);
 
 	const titleField = useRef(null);

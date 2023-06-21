@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
 import { createContext } from 'react';
-import { IUploadFile, _initialUploadFile } from './interfaces';
+import {
+	IFormFields,
+	IUploadFile,
+	_initialFormFields,
+	_initialUploadFile,
+} from './interfaces';
 
 interface IAppContext {
 	appTitle: string;
 	uploadFile: IUploadFile;
+	formFields: IFormFields;
+	setFormFields: (file: IFormFields) => void;
 	setUploadFile: (file: IUploadFile) => void;
 }
 
@@ -18,6 +25,9 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	const [uploadFile, setUploadFile] = useState<IUploadFile>({
 		..._initialUploadFile,
 	});
+	const [formFields, setFormFields] = useState<IFormFields>({
+		..._initialFormFields,
+	});
 	const appTitle = 'File Uploader';
 
 	return (
@@ -25,7 +35,9 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			value={{
 				appTitle,
 				uploadFile,
+				formFields,
 				setUploadFile,
+				setFormFields,
 			}}
 		>
 			{children}
