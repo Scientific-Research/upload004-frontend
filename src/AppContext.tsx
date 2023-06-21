@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createContext } from 'react';
 import {
 	IFileItem,
@@ -19,6 +19,10 @@ interface IAppContext {
 	fileItems: IFileItem[];
 	setFileItems: (items: IFileItem[]) => void;
 	fetchFileItems: () => void;
+	handleSubmit: (
+		e: React.FormEvent<HTMLFormElement>,
+		titleField: React.RefObject<HTMLInputElement>
+	) => void;
 }
 
 interface IAppProvider {
@@ -49,6 +53,42 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		fetchFileItems();
 	}, []);
 
+	const handleSubmit = async (
+		e: React.FormEvent<HTMLFormElement>,
+		titleField: React.RefObject<HTMLInputElement>
+	) => {
+		e.preventDefault();
+		if (uploadFile.file && formFields.title.trim() !== '') {
+			let formData = new FormData();
+			formData.append('file', uploadFile.file);
+			formData.append('title', formFields.title);
+			formData.append('description', formFields.description);
+			formData.append('notes', formFields.notes);
+			formData.append('fileName', uploadFile.file.name);
+			await fetch(`${backendUrl}/uploadfile`, {
+				method: 'POST',
+				body: formData,
+			});
+			// (document.getElementById('mainForm') as any).reset();
+			// setTimeout(() => {
+			//console.log(formFields.title);
+			setFormFields({ ..._initialFormFields });
+			// }, 2000);
+			// console.log('initialFormFields : ', _initialFormFields);
+			// setFormFields({
+			// 	title: '',
+			// 	description: '',
+			// 	notes: '',
+			// });
+			setUploadFile({ ..._initialUploadFile });
+			fetchFileItems();
+
+			if (titleField.current !== null) {
+				(titleField.current as HTMLInputElement).focus();
+			}
+		}
+	};
+
 	return (
 		<AppContext.Provider
 			value={{
@@ -60,6 +100,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				fileItems,
 				setFileItems,
 				fetchFileItems,
+				handleSubmit,
 			}}
 		>
 			{children}
