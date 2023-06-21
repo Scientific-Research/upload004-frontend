@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 import '../App.scss';
-import axios from 'axios';
 import { _initialUploadFile, _initialFormFields } from '../interfaces';
 import { backendUrl } from '../config';
 
