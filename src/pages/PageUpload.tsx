@@ -13,22 +13,17 @@ import {
 import { backendUrl } from '../config';
 
 export const PageUpload = () => {
-	const { uploadFile, setUploadFile, formFields, setFormFields } =
-		useContext(AppContext);
-
-	const [fileItems, setFileItems] = useState<IFileItem[]>([]);
+	const {
+		uploadFile,
+		setUploadFile,
+		formFields,
+		setFormFields,
+		fileItems,
+		setFileItems,
+		fetchFileItems,
+	} = useContext(AppContext);
 
 	const titleField = useRef(null);
-
-	const fetchFileItems = () => {
-		(async () => {
-			setFileItems((await axios.get(`${backendUrl}/fileitems`)).data);
-		})();
-	};
-
-	useEffect(() => {
-		fetchFileItems();
-	}, []);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
