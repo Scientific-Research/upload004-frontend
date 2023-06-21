@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import '../App.scss';
 import axios from 'axios';
 import {
@@ -11,8 +11,12 @@ import {
 import { backendUrl } from '../config';
 
 export const PageUpload = () => {
-	const [uploadFile, setUploadFile] = useState<IUploadFile>(_initialUploadFile);
-	const [formFields, setFormFields] = useState<IFormFields>(_initialFormFields);
+	const [uploadFile, setUploadFile] = useState<IUploadFile>({
+		..._initialUploadFile,
+	});
+	const [formFields, setFormFields] = useState<IFormFields>({
+		..._initialFormFields,
+	});
 	const [fileItems, setFileItems] = useState<IFileItem[]>([]);
 
 	const fetchFileItems = () => {
@@ -25,22 +29,31 @@ export const PageUpload = () => {
 		fetchFileItems();
 	}, []);
 
-	const handleSubmit = async (e: any) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (uploadFile.data && formFields.title.trim() !== '') {
+		if (uploadFile.file && formFields.title.trim() !== '') {
 			let formData = new FormData();
-			formData.append('file', uploadFile.data);
+			formData.append('file', uploadFile.file);
 			formData.append('title', formFields.title);
 			formData.append('description', formFields.description);
 			formData.append('notes', formFields.notes);
-			formData.append('fileName', uploadFile.name);
-			const response = await fetch(`${backendUrl}/uploadfile`, {
+			formData.append('fileName', uploadFile.file.name);
+			await fetch(`${backendUrl}/uploadfile`, {
 				method: 'POST',
 				body: formData,
 			});
-			(document.getElementById('mainForm') as any).reset();
-			setFormFields({ ..._initialFormFields });
-			setUploadFile({ ..._initialUploadFile });
+			// (document.getElementById('mainForm') as any).reset();
+			// setTimeout(() => {
+			//console.log(formFields.title);
+			setFormFields(_initialFormFields);
+			// }, 2000);
+			// console.log('initialFormFields : ', _initialFormFields);
+			// setFormFields({
+			// 	title: '',
+			// 	description: '',
+			// 	notes: '',
+			// });
+			setUploadFile(_initialUploadFile);
 			fetchFileItems();
 		}
 	};
@@ -49,12 +62,14 @@ export const PageUpload = () => {
 		if (e.target.files !== null) {
 			const file = e.target.files[0];
 			const _uploadFile = {
-				name: file.name,
+				// name: file.name,
 				preview: URL.createObjectURL(file),
 				// data: e.target.files[0],
-				data: file,
+				file: file,
 			};
 			setUploadFile(_uploadFile);
+		} else {
+			console.log('ERROR: file is NULL!');
 		}
 	};
 
@@ -71,7 +86,7 @@ export const PageUpload = () => {
 		<div className="page pageUpload">
 			<main>
 				<section>
-					<form id="mainForm" onSubmit={handleSubmit}>
+					<form id="mainForm" onSubmit={(e) => handleSubmit(e)}>
 						<fieldset>
 							<legend>Enter file info and choose file:</legend>
 
@@ -100,14 +115,16 @@ export const PageUpload = () => {
 							/>
 
 							<label>File to upload</label>
-							<input type="file" onChange={handleFileChange}></input>
+							<input type="file" onChange={(e) => handleFileChange(e)}></input>
 							<div className="buttonArea">
 								<div className="preview">
-									{uploadFile.name.endsWith('.png') ||
-									uploadFile.name.endsWith('.jpg') ? (
+									{uploadFile.file?.name.endsWith('.png') ||
+									uploadFile.file?.name.endsWith('.jpg') ? (
 										<img src={uploadFile.preview} width="100" height="100" />
 									) : (
-										<div className="previewFileName">{uploadFile.name}</div>
+										<div className="previewFileName">
+											{uploadFile.file?.name}
+										</div>
 									)}
 								</div>
 								<div className="buttonWrapper">

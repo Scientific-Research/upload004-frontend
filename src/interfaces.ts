@@ -14,9 +14,9 @@ export interface IFormFields {
 
 export interface IUploadFile {
 	preview: string;
-	name: string;
+	// name: string;
 	// data: string;
-	data: File | null;
+	file: File | null;
 }
 
 export const _initialFormFields = {
@@ -26,6 +26,6 @@ export const _initialFormFields = {
 };
 export const _initialUploadFile = {
 	preview: '',
-	name: '',
-	data: null,
+	// name: '',
+	file: null,
 };
