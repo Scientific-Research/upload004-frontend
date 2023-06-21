@@ -76,26 +76,28 @@ export const PageUpload = () => {
 					{fileItems.length === 0 && (
 						<p>There are {fileItems.length} file items</p>
 					)}
-					{fileItems.map((fileItem, i) => {
-						return (
-							<div className="fileItem" key={i}>
-								<img src={`${backendUrl}/${fileItem.iconPathAndFileName}`} />
-								<div className="info">
-									<div className="title">{fileItem.title}</div>
-									<div className="description">{fileItem.description}</div>
-									<div className="notes">{fileItem.notes}</div>
-									<div className="fileName">
-										<a
-											target="_blank"
-											href={`${backendUrl}/uploadedFiles/${fileItem.fileName}`}
-										>
-											{fileItem.fileName}
-										</a>
+					{fileItems
+						// .filter((m) => m.fileName.endsWith('.xlsx'))
+						.map((fileItem, i) => {
+							return (
+								<div className="fileItem" key={i}>
+									<img src={`${backendUrl}/${fileItem.iconPathAndFileName}`} />
+									<div className="info">
+										<div className="title">{fileItem.title}</div>
+										<div className="description">{fileItem.description}</div>
+										<div className="notes">{fileItem.notes}</div>
+										<div className="fileName">
+											<a
+												target="_blank"
+												href={`${backendUrl}/uploadedFiles/${fileItem.fileName}`}
+											>
+												{fileItem.fileName}
+											</a>
+										</div>
 									</div>
 								</div>
-							</div>
-						);
-					})}
+							);
+						})}
 				</section>
 			</main>
 		</div>
