@@ -23,18 +23,10 @@ export const PageUpload = () => {
 		fetchFileItems,
 		handleSubmit,
 		handleFileChange,
+		handleFormFieldChange,
 	} = useContext(AppContext);
 
 	const titleField = useRef(null);
-
-	const handleFormFieldChange = (
-		e: React.ChangeEvent<HTMLInputElement>,
-		fieldName: string
-	) => {
-		const value = e.target.value;
-		formFields[fieldName as keyof IFormFields] = value;
-		setFormFields({ ...formFields });
-	};
 
 	return (
 		<div className="page pageUpload">

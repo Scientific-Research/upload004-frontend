@@ -24,6 +24,10 @@ interface IAppContext {
 		titleField: React.RefObject<HTMLInputElement>
 	) => void;
 	handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	handleFormFieldChange: (
+		e: React.ChangeEvent<HTMLInputElement>,
+		fieldName: string
+	) => void;
 }
 
 interface IAppProvider {
@@ -105,6 +109,15 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		}
 	};
 
+	const handleFormFieldChange = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		fieldName: string
+	) => {
+		const value = e.target.value;
+		formFields[fieldName as keyof IFormFields] = value;
+		setFormFields({ ...formFields });
+	};
+
 	return (
 		<AppContext.Provider
 			value={{
@@ -118,6 +131,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				fetchFileItems,
 				handleSubmit,
 				handleFileChange,
+				handleFormFieldChange,
 			}}
 		>
 			{children}
