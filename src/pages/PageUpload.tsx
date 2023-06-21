@@ -1,4 +1,6 @@
 import { useRef, useState, useEffect, ChangeEvent } from 'react';
+import { useContext } from 'react';
+import { AppContext } from '../AppContext';
 import '../App.scss';
 import axios from 'axios';
 import {
@@ -11,9 +13,7 @@ import {
 import { backendUrl } from '../config';
 
 export const PageUpload = () => {
-	const [uploadFile, setUploadFile] = useState<IUploadFile>({
-		..._initialUploadFile,
-	});
+	const { uploadFile, setUploadFile } = useContext(AppContext);
 	const [formFields, setFormFields] = useState<IFormFields>({
 		..._initialFormFields,
 	});
