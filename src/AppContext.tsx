@@ -23,6 +23,7 @@ interface IAppContext {
 		e: React.FormEvent<HTMLFormElement>,
 		titleField: React.RefObject<HTMLInputElement>
 	) => void;
+	handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface IAppProvider {
@@ -89,6 +90,21 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		}
 	};
 
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files !== null) {
+			const file = e.target.files[0];
+			const _uploadFile = {
+				// name: file.name,
+				preview: URL.createObjectURL(file),
+				// data: e.target.files[0],
+				file: file,
+			};
+			setUploadFile(_uploadFile);
+		} else {
+			console.log('ERROR: file is NULL!');
+		}
+	};
+
 	return (
 		<AppContext.Provider
 			value={{
@@ -101,6 +117,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				setFileItems,
 				fetchFileItems,
 				handleSubmit,
+				handleFileChange,
 			}}
 		>
 			{children}

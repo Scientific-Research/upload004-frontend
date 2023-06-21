@@ -22,24 +22,10 @@ export const PageUpload = () => {
 		setFileItems,
 		fetchFileItems,
 		handleSubmit,
+		handleFileChange,
 	} = useContext(AppContext);
 
 	const titleField = useRef(null);
-
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files !== null) {
-			const file = e.target.files[0];
-			const _uploadFile = {
-				// name: file.name,
-				preview: URL.createObjectURL(file),
-				// data: e.target.files[0],
-				file: file,
-			};
-			setUploadFile(_uploadFile);
-		} else {
-			console.log('ERROR: file is NULL!');
-		}
-	};
 
 	const handleFormFieldChange = (
 		e: React.ChangeEvent<HTMLInputElement>,
